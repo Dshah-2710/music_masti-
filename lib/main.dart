@@ -16,6 +16,31 @@ class MusicMastiApp extends StatelessWidget {
 }
 
 class MusicMastiHomeScreen extends StatelessWidget {
+  final List<String> goodEveningTracks = [
+    'assets/images/kk/kk.jpg',
+    'assets/images/kk/kksong2.jpg',
+    'assets/images/kk/kksong3.jpg',
+    'assets/images/kk/kksong4.jpg',
+    'assets/images/diljit/soorma.jpg',
+    'assets/images/diljit/putt.jpg',
+  ];
+
+  final List<Map<String, String>> featuredPlaylists = [
+    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': ' BLUE EYES'},
+    {'image': 'assets/images/yoyo/brownrang.jpg', 'name': 'BROWN RANG'},
+    {'image': 'assets/images/yoyo/desikalakar.jpg', 'name': 'DESI KALAKAR'},
+    {'image': 'assets/images/yoyo/kalaaster.jpg', 'name': 'KALAASTER'},
+    {'image': 'assets/images/yoyo/jaatmekhma.jpg', 'name': 'JAATMEKHMA'},
+  ];
+
+  final List<Map<String, String>> recentlyPlayed = [
+    {'image': 'assets/images/diljit/bb3.jpg', 'name': 'BHOOL BHOOLAIYA'},
+    {'image': 'assets/images/diljit/lover.jpg', 'name': 'LOVER '},
+    {'image': 'assets/images/diljit/goat.jpg', 'name': 'GOAT'},
+    {'image': 'assets/images/diljit/naina.jpg', 'name': 'NAINA '},
+    {'image': 'assets/images/diljit/stillrollin.jpg', 'name': 'STILL ROLLIN '},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +65,6 @@ class MusicMastiHomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Your Favorites Section
               Text(
                 'Your Favorites',
                 style: TextStyle(
@@ -52,7 +76,6 @@ class MusicMastiHomeScreen extends StatelessWidget {
               SizedBox(height: 10),
               _buildGoodEveningSection(),
               SizedBox(height: 20),
-              // Featured Playlists
               Text(
                 'Featured Playlists',
                 style: TextStyle(
@@ -64,7 +87,6 @@ class MusicMastiHomeScreen extends StatelessWidget {
               SizedBox(height: 10),
               _buildFeaturedPlaylistsCarousel(),
               SizedBox(height: 20),
-              // Recently Played Section
               Text(
                 'Recently Played',
                 style: TextStyle(
@@ -97,26 +119,31 @@ class MusicMastiHomeScreen extends StatelessWidget {
       height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 6,
+        itemCount: goodEveningTracks.length,
         itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.only(right: 10),
-            width: 100,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.purple, Colors.blue],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          String trackName = "Track ${index + 1}";
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                width: 80, // Reduced width for smaller images
+                height: 80, // Reduced height for smaller images
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(goodEveningTracks[index]),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Center(
-              child: Text(
-                'Track ${index + 1}',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+              SizedBox(height: 5),
+              Text(
+                trackName,
+                style: TextStyle(color: Colors.white, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
-            ),
+            ],
           );
         },
       ),
@@ -127,20 +154,20 @@ class MusicMastiHomeScreen extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: PageView.builder(
-        itemCount: 5,
+        itemCount: featuredPlaylists.length,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: NetworkImage('https://via.placeholder.com/300'),
+                image: AssetImage(featuredPlaylists[index]['image']!),
                 fit: BoxFit.cover,
               ),
             ),
             child: Center(
               child: Text(
-                'Playlist ${index + 1}',
+                featuredPlaylists[index]['name']!,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -156,20 +183,12 @@ class MusicMastiHomeScreen extends StatelessWidget {
   }
 
   Widget _buildInteractiveRecentlyPlayed(BuildContext context) {
-    List<String> recentlyPlayed = [
-      'Track 5',
-      'Track 4',
-      'Track 3',
-      'Track 2',
-      'Track 1',
-    ]; // Recent songs are reversed
-
     return Column(
       children: recentlyPlayed.map((track) {
         return GestureDetector(
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Playing $track')),
+              SnackBar(content: Text('Playing ${track['name']}')),
             );
           },
           child: Container(
@@ -190,16 +209,19 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   height: 60,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage('https://via.placeholder.com/150'),
+                      image: AssetImage(track['image']!),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  track,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                Flexible(
+                  child: Text(
+                    track['name']!,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
