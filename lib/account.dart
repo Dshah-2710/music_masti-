@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MusicMastiAccountPage extends StatefulWidget {
   @override
@@ -17,8 +18,14 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
   String fname = '';
   String lname = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
   // Function to handle login button click
-  void handleLogin() {
+  void handleLogin() async {
     // Validate inputs
     if (firstNameController.text.isEmpty ||
         lastNameController.text.isEmpty ||
@@ -43,12 +50,31 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
       fname = '${firstNameController.text}';
       lname = '${lastNameController.text}';
     });
+
+    // Save user data to SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', username);
+    prefs.setString('email', email);
+    prefs.setString('firstName', fname);
+    prefs.setString('lastName', lname);
   }
 
   // Email format validation
   bool isValidEmail(String email) {
     final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return regex.hasMatch(email);
+  }
+
+  // Load user data from SharedPreferences
+  void _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      username = prefs.getString('username') ?? '';
+      email = prefs.getString('email') ?? '';
+      fname = prefs.getString('firstName') ?? '';
+      lname = prefs.getString('lastName') ?? '';
+    });
   }
 
   @override
@@ -70,7 +96,6 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
         ),
       ),
       body: SingleChildScrollView(
-        // Wrap the body with SingleChildScrollView
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
