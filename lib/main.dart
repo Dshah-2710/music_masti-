@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'account.dart';
+
 void main() {
   runApp(MusicMastiApp());
 }
@@ -87,7 +89,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
         backgroundColor: Colors.redAccent,
         child: Icon(Icons.shuffle),
       ),
-      bottomNavigationBar: _buildAnimatedBottomNavigationBar(),
+      bottomNavigationBar: _buildAnimatedBottomNavigationBar(context),
     );
   }
 
@@ -208,7 +210,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedBottomNavigationBar() {
+  Widget _buildAnimatedBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.black,
       unselectedItemColor: Colors.grey,
@@ -226,7 +228,21 @@ class MusicMastiHomeScreen extends StatelessWidget {
           icon: Icon(Icons.library_music),
           label: 'Library',
         ),
+        //Account Icon Added -- Keval Nai
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Account',
+        ),
       ],
+      onTap: (index) {
+        if (index == 3) {
+          // Navigate to the search screen when the search icon is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MusicMastiAccountPage()),
+          );
+        }
+      },
     );
   }
 }
