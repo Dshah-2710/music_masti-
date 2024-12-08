@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'setting.dart';
 
 void main() {
   runApp(MusicMastiApp());
 }
 
 class MusicMastiApp extends StatelessWidget {
+  const MusicMastiApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +19,33 @@ class MusicMastiApp extends StatelessWidget {
 }
 
 class MusicMastiHomeScreen extends StatelessWidget {
+  final List<String> goodEveningTracks = [
+    'assets/images/kk/kk.jpg',
+    'assets/images/kk/kksong2.jpg',
+    'assets/images/kk/kksong3.jpg',
+    'assets/images/kk/kksong4.jpg',
+    'assets/images/diljit/soorma.jpg',
+    'assets/images/diljit/putt.jpg',
+  ];
+
+  final List<Map<String, String>> featuredPlaylists = [
+    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': ' BLUE EYES'},
+    {'image': 'assets/images/yoyo/brownrang.jpg', 'name': 'BROWN RANG'},
+    {'image': 'assets/images/yoyo/desikalakar.jpg', 'name': 'DESI KALAKAR'},
+    {'image': 'assets/images/yoyo/kalaaster.jpg', 'name': 'KALAASTER'},
+    {'image': 'assets/images/yoyo/jaatmekhma.jpg', 'name': 'JAATMEKHMA'},
+  ];
+
+  final List<Map<String, String>> recentlyPlayed = [
+    {'image': 'assets/images/diljit/bb3.jpg', 'name': 'BHOOL BHOOLAIYA'},
+    {'image': 'assets/images/diljit/lover.jpg', 'name': 'LOVER '},
+    {'image': 'assets/images/diljit/goat.jpg', 'name': 'GOAT'},
+    {'image': 'assets/images/diljit/naina.jpg', 'name': 'NAINA '},
+    {'image': 'assets/images/diljit/stillrollin.jpg', 'name': 'STILL ROLLIN '},
+  ];
+
+  MusicMastiHomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,13 +53,13 @@ class MusicMastiHomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Welcome Back!',
           style: TextStyle(color: Colors.white, fontSize: 22),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -40,8 +70,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Your Favorites Section
-              Text(
+              const Text(
                 'Your Favorites',
                 style: TextStyle(
                   color: Colors.white,
@@ -49,11 +78,10 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildGoodEveningSection(),
-              SizedBox(height: 20),
-              // Featured Playlists
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Featured Playlists',
                 style: TextStyle(
                   color: Colors.white,
@@ -61,11 +89,10 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildFeaturedPlaylistsCarousel(),
-              SizedBox(height: 20),
-              // Recently Played Section
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Recently Played',
                 style: TextStyle(
                   color: Colors.white,
@@ -73,7 +100,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildInteractiveRecentlyPlayed(context),
             ],
           ),
@@ -82,13 +109,13 @@ class MusicMastiHomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Shuffle Play!')),
+            const SnackBar(content: Text('Shuffle Play!')),
           );
         },
         backgroundColor: Colors.redAccent,
-        child: Icon(Icons.shuffle),
+        child: const Icon(Icons.shuffle),
       ),
-      bottomNavigationBar: _buildAnimatedBottomNavigationBar(),
+      bottomNavigationBar: _buildAnimatedBottomNavigationBar(context),
     );
   }
 
@@ -97,26 +124,31 @@ class MusicMastiHomeScreen extends StatelessWidget {
       height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 6,
+        itemCount: goodEveningTracks.length,
         itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.only(right: 10),
-            width: 100,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.purple, Colors.blue],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          String trackName = "Track ${index + 1}";
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                width: 80, // Reduced width for smaller images
+                height: 80, // Reduced height for smaller images
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(goodEveningTracks[index]),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: Center(
-              child: Text(
-                'Track ${index + 1}',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+              const SizedBox(height: 5),
+              Text(
+                trackName,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
-            ),
+            ],
           );
         },
       ),
@@ -127,21 +159,21 @@ class MusicMastiHomeScreen extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: PageView.builder(
-        itemCount: 5,
+        itemCount: featuredPlaylists.length,
         itemBuilder: (context, index) {
           return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: NetworkImage('https://via.placeholder.com/300'),
+                image: AssetImage(featuredPlaylists[index]['image']!),
                 fit: BoxFit.cover,
               ),
             ),
             child: Center(
               child: Text(
-                'Playlist ${index + 1}',
-                style: TextStyle(
+                featuredPlaylists[index]['name']!,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -156,25 +188,17 @@ class MusicMastiHomeScreen extends StatelessWidget {
   }
 
   Widget _buildInteractiveRecentlyPlayed(BuildContext context) {
-    List<String> recentlyPlayed = [
-      'Track 5',
-      'Track 4',
-      'Track 3',
-      'Track 2',
-      'Track 1',
-    ]; // Recent songs are reversed
-
     return Column(
       children: recentlyPlayed.map((track) {
         return GestureDetector(
           onTap: () {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Playing $track')),
+              SnackBar(content: Text('Playing ${track['name']}')),
             );
           },
           child: Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.grey[850]!, Colors.grey[900]!],
@@ -190,16 +214,19 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   height: 60,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage('https://via.placeholder.com/150'),
+                      image: AssetImage(track['image']!),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                SizedBox(width: 10),
-                Text(
-                  track,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Text(
+                    track['name']!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -209,12 +236,12 @@ class MusicMastiHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAnimatedBottomNavigationBar() {
+  Widget _buildAnimatedBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.black,
       unselectedItemColor: Colors.grey,
       selectedItemColor: Colors.redAccent,
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -227,7 +254,163 @@ class MusicMastiHomeScreen extends StatelessWidget {
           icon: Icon(Icons.library_music),
           label: 'Library',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Setting',
+        ),
       ],
+      onTap: (index) {
+        if (index == 1) {
+          // Navigate to the search screen when the search icon is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MusicMastiSearchScreen()),
+          );
+        }
+         if (index == 3) {
+          // Navigate to the search screen when the search icon is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsPage()),
+          );
+        }
+      },
+    );
+  }
+}
+
+class MusicMastiSearchScreen extends StatefulWidget {
+  const MusicMastiSearchScreen({super.key});
+
+  @override
+  _MusicMastiSearchScreenState createState() => _MusicMastiSearchScreenState();
+}
+
+class _MusicMastiSearchScreenState extends State<MusicMastiSearchScreen> {
+  final List<Map<String, String>> allTracks = [
+    {'image': 'assets/images/kk/kk.jpg', 'name': 'KK Song 1'},
+    {'image': 'assets/images/kk/kksong2.jpg', 'name': 'KK Song 2'},
+    {'image': 'assets/images/diljit/soorma.jpg', 'name': 'Soorma'},
+    {'image': 'assets/images/diljit/putt.jpg', 'name': 'Putt Jatt Da'},
+    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': 'Blue Eyes'},
+    {'image': 'assets/images/yoyo/brownrang.jpg', 'name': 'Brown Rang'},
+    {'image': 'assets/images/yoyo/desikalakar.jpg', 'name': 'Desi Kalakar'},
+  ];
+
+  List<Map<String, String>> searchResults = [];
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchResults = allTracks;
+  }
+
+  void _searchTracks(String query) {
+    final results = allTracks
+        .where((track) =>
+            track['name']!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    setState(() {
+      searchResults = results;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        title: const Text(
+          'Search Music',
+          style: TextStyle(color: Colors.white, fontSize: 22),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            TextField(
+              controller: searchController,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Search for songs or artists...',
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                filled: true,
+                fillColor: Colors.grey[800],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (query) => _searchTracks(query),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) {
+                  final track = searchResults[index];
+                  return GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Playing ${track['name']}')),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.grey[850]!, Colors.grey[900]!],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(track['image']!),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              track['name']!,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

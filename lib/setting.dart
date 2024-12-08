@@ -1,12 +1,20 @@
-import 'package:flutter/foundation.dart';
+// Author - Ansh Mistry
+
+// This Setting page is about to handle the Music app [Music Masti]. 
+// This Page gives multiple options for user to select. User can handle the Account info by going to Accountpage through Account option.
+// Moreover, there is one Notification Option to give them notification about the new released songs, they can adjust this feature by there choice. 
+// There is also one About Option which gives a dialoge box gives app name and owners of this app. 
+
+
 import 'package:flutter/material.dart';
+import 'account.dart';
 
 void main() {
-  runApp(Settings());
-} 
+  runApp(const Settings());
+}
 
 class Settings extends StatelessWidget {
-  static bool isDarkMode = false;
+  const Settings({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,110 +25,74 @@ class Settings extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: SettingsPage(),
+      home: const SettingsPage(),
     );
   }
 }
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  // Variable to manage the toggle state
+  bool _isNotificationsOn = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         backgroundColor: const Color.fromARGB(156, 0, 255, 38),
       ),
-
       body: ListView(
         children: [
-          
-          // Account
+          // Account page list option
           ListTile(
-            title: Text('Account'),
-            subtitle: Text('Manage your account settings'),
-            leading: Icon(Icons.person),
+            title: const Text('Account'),
+            subtitle: const Text('Manage your account settings'),
+            leading: const Icon(Icons.person),
             onTap: () {
-              // Navigate to account settings
+              // Navigate to the Account Page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AccountPage()),
+              );
             },
           ),
-          // Notifications
+          // Notifications option
           ListTile(
-            title: Text('Notifications'),
-            subtitle: Text('Manage notification preferences'),
-            leading: Icon(Icons.notifications),
-            onTap: () {
-              // Navigate to notification settings
-            },
-          ),
-          // Privacy Policy
-          ListTile(
-            title: Text('Privacy Policy'),
-            leading: Icon(Icons.privacy_tip),
-            onTap: () {
-              // Show privacy policy
-            },
-          ),
-          // Content and Display
-          ListTile(
-            title: Text('Content and Display'),
-            subtitle: Text('Adjust content preferences and UI settings'),
-            leading: Icon(Icons.display_settings),
-            onTap: () {
-              // Navigate to content and display settings
-            },
-          ),
-          // Audio Quality
-          ListTile(
-            title: Text('Audio Quality'),
-            subtitle: Text('Adjust audio streaming quality'),
-            leading: Icon(Icons.audiotrack),
-            onTap: () {
-              // Navigate to audio quality settings
-            },
-          ),
-          // Video Quality
-          ListTile(
-            title: Text('Video Quality'),
-            subtitle: Text('Adjust video playback quality'),
-            leading: Icon(Icons.video_settings),
-            onTap: () {
-              // Navigate to video quality settings
-            },
-          ),
-          // Storage
-          ListTile(
-            title: Text('Storage'),
-            subtitle: Text('Manage storage and downloads'),
-            leading: Icon(Icons.storage),
-            onTap: () {
-              // Navigate to storage settings
-            },
-          ),
-          // Apps and Devices
-          ListTile(
-            title: Text('Apps and Devices'),
-            subtitle: Text('Manage connected apps and devices'),
-            leading: Icon(Icons.devices),
-            onTap: () {
-              // Navigate to apps and devices settings
-            },
-          ),
-          // Advertisement
-          ListTile(
-            title: Text('Advertisement'),
-            subtitle: Text('Manage advertisement preferences'),
-            leading: Icon(Icons.ad_units),
-            onTap: () {
-              // Navigate to advertisement settings
-            },
+            title: const Text('Notifications'),
+            subtitle: const Text('Manage notification preferences'),
+            leading: const Icon(Icons.notifications),
+            trailing: Switch(
+              value: _isNotificationsOn,
+              onChanged: (value) {
+                setState(() {
+                  _isNotificationsOn = value; // Update toggle state
+                });
+              },
+            ),
           ),
           // About
           ListTile(
-            title: Text('About'),
-            subtitle: Text('Learn more about this app'),
-            leading: Icon(Icons.info),
+            title: const Text('About'),
+            subtitle: const Text('Learn more about this app'),
+            leading: const Icon(Icons.info),
             onTap: () {
               // Show about page
+              showAboutDialog(
+                context: context,
+                applicationName: 'Music Masti',
+                applicationIcon: const Icon(Icons.music_note),
+                children: [
+                  const Text('Enjoy the beats!'),
+                  const Text('Owned by - Darshit | Keval | Shivam | Ansh'),
+                ],
+              );
             },
           ),
         ],
