@@ -68,7 +68,6 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
   // Load user data from SharedPreferences
   void _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     setState(() {
       username = prefs.getString('username') ?? '';
       email = prefs.getString('email') ?? '';
@@ -111,7 +110,7 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    '$fname $lname',
+                    username,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -120,7 +119,7 @@ class _MusicMastiAccountPageState extends State<MusicMastiAccountPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '$email',
+                    email,
                     style: TextStyle(color: Colors.grey, fontSize: 16),
                   ),
                   // Input fields for first name, last name, and email
