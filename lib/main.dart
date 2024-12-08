@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(MusicMastiApp());
@@ -15,7 +16,16 @@ class MusicMastiApp extends StatelessWidget {
   }
 }
 
-class MusicMastiHomeScreen extends StatelessWidget {
+class MusicMastiHomeScreen extends StatefulWidget {
+  @override
+  _MusicMastiHomeScreenState createState() => _MusicMastiHomeScreenState();
+}
+
+class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentSong;
+  PlayerState _playerState = PlayerState.stopped;
+
   final List<String> goodEveningTracks = [
     'assets/images/kk/kk.jpg',
     'assets/images/kk/kksong2.jpg',
@@ -26,7 +36,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
   ];
 
   final List<Map<String, String>> featuredPlaylists = [
-    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': ' BLUE EYES'},
+    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': 'BLUE EYES'},
     {'image': 'assets/images/yoyo/brownrang.jpg', 'name': 'BROWN RANG'},
     {'image': 'assets/images/yoyo/desikalakar.jpg', 'name': 'DESI KALAKAR'},
     {'image': 'assets/images/yoyo/kalaaster.jpg', 'name': 'KALAASTER'},
@@ -34,12 +44,45 @@ class MusicMastiHomeScreen extends StatelessWidget {
   ];
 
   final List<Map<String, String>> recentlyPlayed = [
-    {'image': 'assets/images/diljit/bb3.jpg', 'name': 'BHOOL BHOOLAIYA'},
-    {'image': 'assets/images/diljit/lover.jpg', 'name': 'LOVER '},
-    {'image': 'assets/images/diljit/goat.jpg', 'name': 'GOAT'},
-    {'image': 'assets/images/diljit/naina.jpg', 'name': 'NAINA '},
-    {'image': 'assets/images/diljit/stillrollin.jpg', 'name': 'STILL ROLLIN '},
+    {'image': 'assets/images/diljit/bb3.jpg', 'name': 'BHOOL BHOOLAIYA', 'path': 'assets/audio/bhoolbholaiya.mp3'},
+    {'image': 'assets/images/diljit/lover.jpg', 'name': 'LOVER', 'path': 'assets/audio/lover.mp3'},
+    {'image': 'assets/images/diljit/goat.jpg', 'name': 'GOAT', 'path': 'assets/audio/goat.mp3'},
+    {'image': 'assets/images/diljit/naina.jpg', 'name': 'NAINA', 'path': 'assets/audio/naina.mp3'},
+    {'image': 'assets/images/diljit/stillrollin.jpg', 'name': 'STILL ROLLIN', 'path': 'assets/audio/stillrollin.mp3'},
   ];
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  // Play or Pause the song
+  Future<void> _playPauseSong(String path) async {
+    if (_currentSong == path && _playerState == PlayerState.playing) {
+      // Pause if the song is already playing
+      await _audioPlayer.pause();
+      setState(() {
+        _playerState = PlayerState.paused;
+      });
+    } else {
+      // Play the selected song
+      await _audioPlayer.play(AssetSource(path));
+      setState(() {
+        _currentSong = path;
+        _playerState = PlayerState.playing;
+      });
+    }
+  }
+
+  // Stop the currently playing audio
+  Future<void> _stopAudio() async {
+    await _audioPlayer.stop();
+    setState(() {
+      _currentSong = null;
+      _playerState = PlayerState.stopped;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +145,9 @@ class MusicMastiHomeScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Shuffle Play!')),
-          );
-        },
+        onPressed: _stopAudio,
         backgroundColor: Colors.redAccent,
-        child: Icon(Icons.shuffle),
+        child: Icon(Icons.stop),
       ),
       bottomNavigationBar: _buildAnimatedBottomNavigationBar(),
     );
@@ -121,14 +160,12 @@ class MusicMastiHomeScreen extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: goodEveningTracks.length,
         itemBuilder: (context, index) {
-          String trackName = "Track ${index + 1}";
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 margin: EdgeInsets.only(right: 10),
-                width: 80, // Reduced width for smaller images
-                height: 80, // Reduced height for smaller images
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(goodEveningTracks[index]),
@@ -139,9 +176,8 @@ class MusicMastiHomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                trackName,
+                'Track ${index + 1}',
                 style: TextStyle(color: Colors.white, fontSize: 14),
-                textAlign: TextAlign.center,
               ),
             ],
           );
@@ -187,9 +223,7 @@ class MusicMastiHomeScreen extends StatelessWidget {
       children: recentlyPlayed.map((track) {
         return GestureDetector(
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Playing ${track['name']}')),
-            );
+            _playPauseSong(track['path']!);
           },
           child: Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -216,12 +250,9 @@ class MusicMastiHomeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    track['name']!,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Text(
+                  track['name']!,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ],
             ),
@@ -237,18 +268,9 @@ class MusicMastiHomeScreen extends StatelessWidget {
       unselectedItemColor: Colors.grey,
       selectedItemColor: Colors.redAccent,
       items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.library_music),
-          label: 'Library',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+        BottomNavigationBarItem(icon: Icon(Icons.library_music), label: 'Library'),
       ],
     );
   }
