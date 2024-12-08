@@ -6,6 +6,8 @@ void main() {
 }
 
 class MusicMastiApp extends StatelessWidget {
+  const MusicMastiApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,6 +53,8 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
     {'image': 'assets/images/diljit/stillrollin.jpg', 'name': 'STILL ROLLIN', 'path': 'assets/audio/stillrollin.mp3'},
   ];
 
+  MusicMastiHomeScreen({super.key});
+
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -91,13 +95,13 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Welcome Back!',
           style: TextStyle(color: Colors.white, fontSize: 22),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: Colors.white),
+            icon: const Icon(Icons.notifications, color: Colors.white),
             onPressed: () {},
           ),
         ],
@@ -108,7 +112,7 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Your Favorites',
                 style: TextStyle(
                   color: Colors.white,
@@ -116,10 +120,10 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildGoodEveningSection(),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Featured Playlists',
                 style: TextStyle(
                   color: Colors.white,
@@ -127,10 +131,10 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildFeaturedPlaylistsCarousel(),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Recently Played',
                 style: TextStyle(
                   color: Colors.white,
@@ -138,7 +142,7 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildInteractiveRecentlyPlayed(context),
             ],
           ),
@@ -148,8 +152,9 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
         onPressed: _stopAudio,
         backgroundColor: Colors.redAccent,
         child: Icon(Icons.stop),
+       
       ),
-      bottomNavigationBar: _buildAnimatedBottomNavigationBar(),
+      bottomNavigationBar: _buildAnimatedBottomNavigationBar(context),
     );
   }
 
@@ -166,6 +171,7 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                 margin: EdgeInsets.only(right: 10),
                 width: 80,
                 height: 80,
+
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(goodEveningTracks[index]),
@@ -174,10 +180,11 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 'Track ${index + 1}',
                 style: TextStyle(color: Colors.white, fontSize: 14),
+
               ),
             ],
           );
@@ -193,7 +200,7 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
         itemCount: featuredPlaylists.length,
         itemBuilder: (context, index) {
           return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
@@ -204,7 +211,7 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
             child: Center(
               child: Text(
                 featuredPlaylists[index]['name']!,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -226,8 +233,8 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
             _playPauseSong(track['path']!);
           },
           child: Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Colors.grey[850]!, Colors.grey[900]!],
@@ -249,10 +256,14 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                SizedBox(width: 10),
-                Text(
-                  track['name']!,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+     
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Text(
+                    track['name']!,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -262,16 +273,171 @@ class _MusicMastiHomeScreenState extends State<MusicMastiHomeScreen> {
     );
   }
 
-  Widget _buildAnimatedBottomNavigationBar() {
+  Widget _buildAnimatedBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       backgroundColor: Colors.black,
       unselectedItemColor: Colors.grey,
       selectedItemColor: Colors.redAccent,
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        BottomNavigationBarItem(icon: Icon(Icons.library_music), label: 'Library'),
+
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.library_music),
+          label: 'Library',
+        ),
       ],
+      onTap: (index) {
+        if (index == 1) {
+          // Navigate to the search screen when the search icon is tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MusicMastiSearchScreen()),
+          );
+        }
+      },
+    );
+  }
+}
+
+class MusicMastiSearchScreen extends StatefulWidget {
+  const MusicMastiSearchScreen({super.key});
+
+  @override
+  _MusicMastiSearchScreenState createState() => _MusicMastiSearchScreenState();
+}
+
+class _MusicMastiSearchScreenState extends State<MusicMastiSearchScreen> {
+  final List<Map<String, String>> allTracks = [
+    {'image': 'assets/images/kk/kk.jpg', 'name': 'KK Song 1'},
+    {'image': 'assets/images/kk/kksong2.jpg', 'name': 'KK Song 2'},
+    {'image': 'assets/images/diljit/soorma.jpg', 'name': 'Soorma'},
+    {'image': 'assets/images/diljit/putt.jpg', 'name': 'Putt Jatt Da'},
+    {'image': 'assets/images/yoyo/blueeyes.jpg', 'name': 'Blue Eyes'},
+    {'image': 'assets/images/yoyo/brownrang.jpg', 'name': 'Brown Rang'},
+    {'image': 'assets/images/yoyo/desikalakar.jpg', 'name': 'Desi Kalakar'},
+  ];
+
+  List<Map<String, String>> searchResults = [];
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    searchResults = allTracks;
+  }
+
+  void _searchTracks(String query) {
+    final results = allTracks
+        .where((track) =>
+            track['name']!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    setState(() {
+      searchResults = results;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        title: const Text(
+          'Search Music',
+          style: TextStyle(color: Colors.white, fontSize: 22),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            TextField(
+              controller: searchController,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Search for songs or artists...',
+                hintStyle: const TextStyle(color: Colors.white54),
+                prefixIcon: const Icon(Icons.search, color: Colors.white),
+                filled: true,
+                fillColor: Colors.grey[800],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (query) => _searchTracks(query),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) {
+                  final track = searchResults[index];
+                  return GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Playing ${track['name']}')),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.grey[850]!, Colors.grey[900]!],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(track['image']!),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              track['name']!,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
