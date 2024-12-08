@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.2.0
+  audioplayers: ^6.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,7 +64,6 @@ flutter:
         - assets/Images/diljit/
         - assets/Images/kk/
         - assets/Images/recentlyplayed/
-        - assets/Images/recomended/
         - assets/Images/spiritual_songs/
         - assets/Images/yoyo/
 
